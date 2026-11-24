@@ -1,5 +1,5 @@
-import 'package:fish_check/features/catches/domain/catch.dart';
-import 'package:fish_check/features/catches/domain/catch_repository.dart';
+import 'package:fish_check/features/catches/domain/entities/catch.dart';
+import 'package:fish_check/features/catches/domain/repositories/catch_repository.dart';
 
 class InMemoryCatchRepository implements CatchRepository {
   final List<FishCatch> _catches = [

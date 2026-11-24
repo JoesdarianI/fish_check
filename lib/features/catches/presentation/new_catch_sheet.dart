@@ -1,4 +1,4 @@
-import 'package:fish_check/features/catches/presentation/catch_cubit.dart';
+import 'package:fish_check/features/catches/presentation/blocs/catch_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

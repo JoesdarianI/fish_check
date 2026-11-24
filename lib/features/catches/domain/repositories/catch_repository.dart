@@ -1,4 +1,4 @@
-import 'package:fish_check/features/catches/domain/catch.dart';
+import 'package:fish_check/features/catches/domain/entities/catch.dart';
 
 abstract interface class CatchRepository {
   Future<List<FishCatch>> getCatches();

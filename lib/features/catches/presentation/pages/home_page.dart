@@ -1,7 +1,7 @@
 import 'package:fish_check/core/theme/app_colors.dart';
 import 'package:fish_check/features/auth/presentation/auth_cubit.dart';
-import 'package:fish_check/features/catches/domain/catch.dart';
-import 'package:fish_check/features/catches/presentation/catch_cubit.dart';
+import 'package:fish_check/features/catches/domain/entities/catch.dart';
+import 'package:fish_check/features/catches/presentation/blocs/catch_cubit.dart';
 import 'package:fish_check/features/catches/presentation/new_catch_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,9 +27,9 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => const NewCatchSheet(),
     );
     if (added == true && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Catch added to your map.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Catch added to your map.')));
     }
   }
 
@@ -56,8 +56,16 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedTab,
         onDestinationSelected: (index) => setState(() => _selectedTab = index),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.map_outlined), selectedIcon: Icon(Icons.map), label: 'Map'),
-          NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'My catches'),
+          NavigationDestination(
+            icon: Icon(Icons.map_outlined),
+            selectedIcon: Icon(Icons.map),
+            label: 'Map',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.menu_book_outlined),
+            selectedIcon: Icon(Icons.menu_book),
+            label: 'My catches',
+          ),
         ],
       ),
     );
@@ -78,24 +86,44 @@ class _HomePageState extends State<HomePage> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.fish_check',
+                  userAgentPackageName: 'com.joes.fish_check',
+                ),
+                const RichAttributionWidget(
+                  attributions: [
+                    TextSourceAttribution(
+                      '© OpenStreetMap contributors',
+                      // Optional: opens the license page when tapped
+                      onTap: null,
+                    ),
+                  ],
                 ),
                 MarkerLayer(
                   markers: catches
                       .map(
                         (fishCatch) => Marker(
-                          point: LatLng(fishCatch.latitude, fishCatch.longitude),
+                          point: LatLng(
+                            fishCatch.latitude,
+                            fishCatch.longitude,
+                          ),
                           width: 48,
                           height: 48,
                           child: Tooltip(
-                            message: '${fishCatch.species} · ${fishCatch.locationName}',
+                            message:
+                                '${fishCatch.species} · ${fishCatch.locationName}',
                             child: Container(
                               decoration: BoxDecoration(
                                 color: AppColors.primaryOcean,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white, width: 3),
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 3,
+                                ),
                               ),
-                              child: const Icon(Icons.phishing, color: Colors.white, size: 22),
+                              child: const Icon(
+                                Icons.phishing,
+                                color: Colors.white,
+                                size: 22,
+                              ),
                             ),
                           ),
                         ),
@@ -128,7 +156,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       IconButton(
                         tooltip: 'Reset map',
-                        onPressed: () => _mapController.move(const LatLng(46.805, -121.726), 12.5),
+                        onPressed: () => _mapController.move(
+                          const LatLng(46.805, -121.726),
+                          12.5,
+                        ),
                         icon: const Icon(Icons.my_location),
                       ),
                     ],
@@ -145,13 +176,17 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCatchList() {
     return BlocBuilder<CatchCubit, CatchState>(
       builder: (context, state) {
-        if (state is CatchLoading) return const Center(child: CircularProgressIndicator());
+        if (state is CatchLoading)
+          return const Center(child: CircularProgressIndicator());
         if (state is CatchFailure) return Center(child: Text(state.message));
         final catches = (state as CatchLoaded).catches;
         return ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
           children: [
-            Text('Your fishing journal', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'Your fishing journal',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 6),
             Text('Every catch has a story. Keep yours on the map.'),
             const SizedBox(height: 18),
@@ -171,8 +206,13 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: AppColors.secondaryTeal.withAlpha(30),
           child: const Icon(Icons.phishing, color: AppColors.secondaryTeal),
         ),
-        title: Text(fishCatch.species, style: const TextStyle(fontWeight: FontWeight.w700)),
-        subtitle: Text('${fishCatch.locationName}\n${_formatDate(fishCatch.caughtAt)}'),
+        title: Text(
+          fishCatch.species,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+        subtitle: Text(
+          '${fishCatch.locationName}\n${_formatDate(fishCatch.caughtAt)}',
+        ),
         isThreeLine: true,
         trailing: const Icon(Icons.chevron_right),
       ),

@@ -2,9 +2,9 @@ import 'package:fish_check/core/theme/app_theme.dart';
 import 'package:fish_check/features/auth/data/in_memory_auth_repository.dart';
 import 'package:fish_check/features/auth/presentation/auth_cubit.dart';
 import 'package:fish_check/features/auth/presentation/login_page.dart';
-import 'package:fish_check/features/catches/data/in_memory_catch_repository.dart';
-import 'package:fish_check/features/catches/presentation/catch_cubit.dart';
-import 'package:fish_check/features/catches/presentation/home_page.dart';
+import 'package:fish_check/features/catches/data/repositories/in_memory_catch_repository.dart';
+import 'package:fish_check/features/catches/presentation/blocs/catch_cubit.dart';
+import 'package:fish_check/features/catches/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
